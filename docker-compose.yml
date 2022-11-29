@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+
+  fastapi:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    env_file: 
+      - config/fastapi.env
+      - config/db.env
+    networks:
+      solar-stats:
+        aliases:
+          - solar-stats-fastapi
+    ports:
+      - 80:80
+    depends_on:
+      - postgres15
+    container_name: fastapi
+
+  postgres15:
+    image: postgres:15-alpine
+    env_file:
+      - config/db.env
+    environment:
+      PGDATA: /var/lib/postgresql/data/
+    networks:
+      solar-stats:
+        aliases:
+          - solar-stats-postgres15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    container_name: postgres15
+
+networks:
+  solar-stats:
+
+volumes:
+  pgdata:
