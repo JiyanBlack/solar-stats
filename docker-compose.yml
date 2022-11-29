@@ -29,6 +29,8 @@ services:
       solar-stats:
         aliases:
           - solar-stats-postgres15
+    ports:
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     container_name: postgres15

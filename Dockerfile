@@ -1,8 +1,10 @@
-# start from an official image
 FROM python:3.11
+
+RUN apt-get update && apt-get install cron curl -y 
 
 # set work directory
 WORKDIR /usr/src/app
+RUN crontab -l | { cat; echo "* * * * * curl 0.0.0.0/get_watt"; } | crontab -
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,4 +18,6 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 # copy project
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+RUN chmod +x ./start.sh
+
+CMD ["sh", "./start.sh"]
