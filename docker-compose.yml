@@ -4,8 +4,6 @@ services:
 
   fastapi:
     build: .
-    volumes:
-      - .:/usr/src/app
     env_file: 
       - config/fastapi.env
       - config/db.env
@@ -14,7 +12,7 @@ services:
         aliases:
           - solar-stats-fastapi
     ports:
-      - 80:80
+      - 3000:3000
     depends_on:
       - postgres15
     container_name: fastapi
