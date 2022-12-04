@@ -27,5 +27,6 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # run start script
+RUN npm install -g wait-port
 RUN chmod +x ./start.sh
 CMD ["sh", "./start.sh"]

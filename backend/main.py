@@ -8,6 +8,7 @@ from .db_operations import init_db, insert_watt
 from .fronius_connector import FroniusConnector
 from .PGConnector import PGConnector
 
+
 app = FastAPI()
 origins = ["http://localhost:3000", "localhost:3000"]
 
