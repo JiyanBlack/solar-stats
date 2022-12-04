@@ -97,7 +97,7 @@ function DashboardContent() {
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      fetch("http://localhost:3000/api/get_watt")
+      fetch("http://192.168.0.225:3000/api/get_watt")
         .then((response) => response.json())
         .then((data) => setCurrentWatt(data.watt));
     }, 1000);
