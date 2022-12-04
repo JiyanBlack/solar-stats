@@ -9,18 +9,17 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
+import { mainListItems } from "./listItems";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import dayjs from "dayjs";
 
 function Copyright(props) {
   return (
@@ -89,11 +88,32 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+  const [currentWatt, setCurrentWatt] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      fetch("http://localhost:3000/api/get_watt")
+        .then((response) => response.json())
+        .then((data) => setCurrentWatt(data.watt));
+    }, 1000);
+    return () => clearInterval(interval);
+  });
+
+  const [datetime, setDatetime] = React.useState(
+    dayjs().format("YYYY-MM-DD HH:mm:ss")
+  );
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setDatetime(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+    }, 1000);
+    return () => clearInterval(interval);
+  });
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -123,13 +143,8 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Solar-Stats
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -149,7 +164,6 @@ function DashboardContent() {
           <List component="nav">
             {mainListItems}
             <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
           </List>
         </Drawer>
         <Box
@@ -167,6 +181,18 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: 240,
+                  }}
+                >
+                  <Deposits currentWatt={currentWatt} datetime={datetime} />
+                </Paper>
+              </Grid>
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
@@ -178,19 +204,6 @@ function DashboardContent() {
                   }}
                 >
                   <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
                 </Paper>
               </Grid>
               <Grid item xs={12}>

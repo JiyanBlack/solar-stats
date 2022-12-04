@@ -33,9 +33,9 @@ class FroniusConnector:
             },
         )
 
-    def fetch_realtime_watt(self):
+    def fetch_realtime_watt(self, timeout=5):
         url, params = self.request_get_system_realtime_data()
-        r = requests.get(url, params=params, timeout=5)
+        r = requests.get(url, params=params, timeout=timeout)
         res = json.loads(r.text)
         return res["Body"]["Data"]["PAC"]["Values"]["1"]
 

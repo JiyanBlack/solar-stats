@@ -37,7 +37,7 @@ class PGConnector:
             result = await conn.fetch(query)
             return result
 
-    async def execute(self, query: str):
+    async def execute(self, query: str) -> None:
         await self.connect()
         async with self._connection_pool.acquire() as conn:
             async with conn.transaction():

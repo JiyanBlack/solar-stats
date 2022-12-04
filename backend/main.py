@@ -8,13 +8,11 @@ from .db_operations import init_db, insert_watt
 from .fronius_connector import FroniusConnector
 from .PGConnector import PGConnector
 
-
 app = FastAPI()
-origins = ["http://localhost:3000", "localhost:3000"]
 
 
 app.add_middleware(
-    CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+    CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
 )
 
 
@@ -31,7 +29,7 @@ async def get_watt(request: Request):
 @app.get("/api/get_watt")
 async def get_watt(request: Request):
     try:
-        watt = app.state.fc.fetch_realtime_watt()
+        watt = app.state.fc.fetch_realtime_watt(3)
     except Exception as e:
         watt = 0
     return {"watt": watt}
