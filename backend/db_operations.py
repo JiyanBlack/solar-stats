@@ -1,3 +1,5 @@
+import os
+
 from .PGConnector import PGConnector
 
 
@@ -18,3 +20,12 @@ async def insert_watt(pgcon: PGConnector, watt: int):
         INSERT INTO realtime_watt (ts, watt) VALUES (NOW(), {watt});
     """
     await pgcon.execute(insert_watt)
+
+
+async def init_sql_files(pgcon: PGConnector):
+    sql_function_folder = os.path.join(os.path.dirname(__file__), "sql_functions")
+    for file in os.listdir(sql_function_folder):
+        if file.endswith(".sql"):
+            with open(os.path.join(sql_function_folder, file), "r") as f:
+                await pgcon.execute(f.read())
+            print("Loaded SQL function: {}".format(file))
