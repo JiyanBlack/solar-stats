@@ -36,7 +36,6 @@ async def save_watt(request: Request):
     try:
         watt = app.state.fc.fetch_realtime_watt()
     except Exception as e:
-        print(e)
         watt = 0
     await insert_watt(app.state.db, watt)
     return {"watt": watt}
@@ -47,9 +46,18 @@ async def get_watt(request: Request):
     try:
         watt = app.state.fc.fetch_realtime_watt(3)
     except Exception as e:
-        print(e)
         watt = 0
     return {"watt": watt}
+
+
+@app.get("/api/get_watt_history")
+async def get_watt_history(request: Request):
+    pgcon = app.state.db
+    query = """
+        SELECT * FROM realtime_watt ORDER BY ts DESC LIMIT 1000;
+    """
+    res = await pgcon.fetch(query)
+    return res
 
 
 @app.post("/api/get_aggregated_watt")

@@ -7,6 +7,8 @@ services:
     env_file: 
       - config/fastapi.env
       - config/db.env
+    volumes:
+      - ./backend:/usr/src/app/backend
     networks:
       solar-stats:
         aliases:

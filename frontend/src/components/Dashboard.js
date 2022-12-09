@@ -18,8 +18,11 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./listItems";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
-import Orders from "./Orders";
+import TableRecords from "./TableRecords";
 import dayjs from "dayjs";
+
+const serverUrl = "http://localhost:3000";
+// const serverUrl = "http://192.168.0.225:3000";
 
 function Copyright(props) {
   return (
@@ -31,7 +34,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        SolarStats
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -94,26 +97,28 @@ function DashboardContent() {
   };
 
   const [currentWatt, setCurrentWatt] = React.useState(0);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      fetch("http://192.168.0.225:3000/api/get_watt")
-        .then((response) => response.json())
-        .then((data) => setCurrentWatt(data.watt));
-    }, 1000);
-    return () => clearInterval(interval);
-  });
-
   const [datetime, setDatetime] = React.useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
-
+  const [wattData, setWattData] = React.useState([]);
+  React.useEffect(() => {
+    fetch(serverUrl + "/api/get_watt")
+      .then((response) => response.json())
+      .then((data) => setCurrentWatt(data.watt));
+    fetch(serverUrl + "/api/get_watt_history")
+      .then((response) => response.json())
+      .then((data) => setWattData(data));
+  });
   React.useEffect(() => {
     const interval = setInterval(() => {
+      fetch(serverUrl + "/api/get_watt")
+        .then((response) => response.json())
+        .then((data) => setCurrentWatt(data.watt));
       setDatetime(dayjs().format("YYYY-MM-DD HH:mm:ss"));
     }, 1000);
     return () => clearInterval(interval);
   });
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -208,7 +213,7 @@ function DashboardContent() {
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
+                  <TableRecords wattData={wattData} />
                 </Paper>
               </Grid>
             </Grid>
