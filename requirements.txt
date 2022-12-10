@@ -1,6 +1,6 @@
 fastapi<0.89.0
 pydantic<1.11.0
-uvicorn<0.20
+uvicorn[standard]
 asyncpg<0.30.0
 requests<2.29.0
 # pip install --no-cache-dir --upgrade -r requirements.txt

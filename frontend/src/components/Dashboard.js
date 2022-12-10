@@ -21,9 +21,6 @@ import Deposits from "./Deposits";
 import TableRecords from "./TableRecords";
 import dayjs from "dayjs";
 
-const serverUrl = "http://localhost:3000";
-// const serverUrl = "http://192.168.0.225:3000";
-
 function Copyright(props) {
   return (
     <Typography
@@ -90,7 +87,9 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+export default function Dashboard({ wattData, serverUrl, aggData }) {
+  const [url, setUrl] = React.useState(serverUrl);
+
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -100,18 +99,10 @@ function DashboardContent() {
   const [datetime, setDatetime] = React.useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
-  const [wattData, setWattData] = React.useState([]);
-  React.useEffect(() => {
-    fetch(serverUrl + "/api/get_watt")
-      .then((response) => response.json())
-      .then((data) => setCurrentWatt(data.watt));
-    fetch(serverUrl + "/api/get_watt_history")
-      .then((response) => response.json())
-      .then((data) => setWattData(data));
-  });
+
   React.useEffect(() => {
     const interval = setInterval(() => {
-      fetch(serverUrl + "/api/get_watt")
+      fetch(url + "/api/get_watt")
         .then((response) => response.json())
         .then((data) => setCurrentWatt(data.watt));
       setDatetime(dayjs().format("YYYY-MM-DD HH:mm:ss"));
@@ -208,7 +199,7 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  <Chart />
+                  <Chart aggData={aggData} />
                 </Paper>
               </Grid>
               <Grid item xs={12}>
@@ -223,8 +214,4 @@ function DashboardContent() {
       </Box>
     </ThemeProvider>
   );
-}
-
-export default function Dashboard() {
-  return <DashboardContent />;
 }

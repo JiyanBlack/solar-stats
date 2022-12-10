@@ -9,6 +9,7 @@ from pydantic import BaseModel, validator
 from .db_operations import init_db, init_sql_files, insert_watt
 from .fronius_connector import FroniusConnector
 from .PGConnector import PGConnector
+import json
 
 app = FastAPI()
 
@@ -23,12 +24,6 @@ class Item(BaseModel):
     query_end_time: datetime
     gap: int
     intz: str
-
-    @validator("gap")
-    def gap_range_validator(cls, v):
-        if v not in set(5, 10, 15, 30, 60, 1440, 10080):
-            raise ValueError("gap must be in a choice of 5, 10, 15, 30, 60, 1440, 10080")
-        return v
 
 
 @app.get("/api/save_watt")
@@ -56,17 +51,18 @@ async def get_watt_history(request: Request):
     query = """
         SELECT * FROM realtime_watt ORDER BY ts DESC LIMIT 1000;
     """
-    res = await pgcon.fetch(query)
-    return res
+    return await pgcon.fetch(query)
 
 
 @app.post("/api/get_aggregated_watt")
 async def get_aggregated_watt(request: Request, item: Item):
     pgcon = app.state.db
+
     query = f"""
         SELECT * FROM timeseries_watt('{item.query_start_time}', '{item.query_end_time}', {item.gap}, '{item.intz}');
     """
-    return await pgcon.fetch(query)
+    res = await pgcon.fetch(query)
+    return json.loads(res[0]["result"])
 
 
 app.mount("/", StaticFiles(directory="frontend/build/", html=True), name="static")

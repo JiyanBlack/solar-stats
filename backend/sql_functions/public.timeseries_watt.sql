@@ -53,7 +53,7 @@ BEGIN
                           GROUP BY get_date_trunc(ts, gap))
 
         SELECT json_agg(final_result)::jsonb
-        FROM (SELECT timeslot AT TIME ZONE intz, avg_watt, percentile_01th, percentile_50th, percentile_99th
+        FROM (SELECT timeslot AT TIME ZONE intz AS ts, avg_watt, percentile_01th, percentile_50th, percentile_99th
               FROM agg_watt) AS final_result;
 END
 $function$;
