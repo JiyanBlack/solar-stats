@@ -1,15 +1,15 @@
+import json
 import os
 from datetime import datetime
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 from .db_operations import init_db, init_sql_files, insert_watt
 from .fronius_connector import FroniusConnector
 from .PGConnector import PGConnector
-import json
 
 app = FastAPI()
 
@@ -59,7 +59,8 @@ async def get_aggregated_watt(request: Request, item: Item):
     pgcon = app.state.db
 
     query = f"""
-        SELECT * FROM timeseries_watt('{item.query_start_time}', '{item.query_end_time}', {item.gap}, '{item.intz}');
+        SELECT * FROM timeseries_watt('{item.query_start_time}',
+        '{item.query_end_time}', {item.gap}, '{item.intz}');
     """
     res = await pgcon.fetch(query)
     return json.loads(res[0]["result"])
