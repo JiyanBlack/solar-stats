@@ -17,9 +17,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./listItems";
 import Chart from "./Chart";
-import Deposits from "./Deposits";
+import RealtimeBoard from "./RealtimeBoard";
 import TableRecords from "./TableRecords";
-import dayjs from "dayjs";
 
 function Copyright(props) {
   return (
@@ -30,7 +29,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="http://solarstats.tplinkdns.com">
         SolarStats
       </Link>{" "}
       {new Date().getFullYear()}
@@ -88,27 +87,10 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 export default function Dashboard({ wattData, serverUrl, aggData }) {
-  const [url] = React.useState(serverUrl);
-
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const [currentWatt, setCurrentWatt] = React.useState(0);
-  const [datetime, setDatetime] = React.useState(
-    dayjs().format("YYYY-MM-DD HH:mm:ss")
-  );
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(url + "/api/get_watt")
-        .then((response) => response.json())
-        .then((data) => setCurrentWatt(data.watt));
-      setDatetime(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-    }, 1000);
-    return () => clearInterval(interval);
-  });
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -186,7 +168,7 @@ export default function Dashboard({ wattData, serverUrl, aggData }) {
                     height: 240,
                   }}
                 >
-                  <Deposits currentWatt={currentWatt} datetime={datetime} />
+                  <RealtimeBoard serverUrl={serverUrl} />
                 </Paper>
               </Grid>
               {/* Chart */}
