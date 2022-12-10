@@ -22,15 +22,10 @@ import TableRecords from "./TableRecords";
 
 function Copyright(props) {
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="http://solarstats.tplinkdns.com">
-        SolarStats
+    <Typography variant="body2" color="text" align="center" {...props}>
+      {"Copyright © Yan Ji  "}
+      <Link color="inherit" href="https://github.com/JiyanBlack/solar-stats">
+        Github Repo
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}

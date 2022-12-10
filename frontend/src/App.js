@@ -20,7 +20,6 @@ function App() {
       gap: 60,
       intz: dayjs.tz.guess(),
     };
-    console.log(JSON.stringify(requestBody));
     fetch(serverUrl + "/api/get_watt_history")
       .then((response) => response.json())
       .then((data) => setWattData(data));
