@@ -88,7 +88,7 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 export default function Dashboard({ wattData, serverUrl, aggData }) {
-  const [url, setUrl] = React.useState(serverUrl);
+  const [url] = React.useState(serverUrl);
 
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
