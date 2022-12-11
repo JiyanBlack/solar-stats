@@ -3,6 +3,7 @@ import * as React from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -16,7 +17,7 @@ function App() {
   React.useEffect(() => {
     const requestBody = {
       query_end_time: dayjs.utc().format(),
-      query_start_time: dayjs.utc().subtract(7, "day").format(),
+      query_start_time: dayjs.utc().subtract(3, "day").format(),
       gap: 60,
       intz: dayjs.tz.guess(),
     };

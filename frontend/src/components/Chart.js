@@ -15,7 +15,7 @@ export default function Chart({ aggData }) {
 
   return (
     <React.Fragment>
-      <Title>Solar</Title>
+      <Title>Production in Last 3 Days</Title>
       <ResponsiveContainer>
         <LineChart
           data={aggData}
