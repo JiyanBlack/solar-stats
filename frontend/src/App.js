@@ -8,7 +8,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 // const serverUrl = "http://localhost:3000";
-const serverUrl = "http://solarstats.tplinkdns.com";
+const serverUrl = "https://solarstats.tplinkdns.com";
 
 function App() {
   const [wattData, setWattData] = React.useState([]);
