@@ -7,7 +7,8 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const serverUrl = "http://localhost";
+// const serverUrl = "http://localhost:3000";
+const serverUrl = "http://192.168.0.116";
 // const serverUrl = "https://solarstats.tplinkdns.com";
 
 function App() {
