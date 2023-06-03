@@ -4,6 +4,7 @@ services:
 
   fastapi:
     build: .
+    restart: always 
     env_file: 
       - config/fastapi.env
       - config/db.env
@@ -21,6 +22,7 @@ services:
 
   postgres15:
     image: postgres:15-alpine
+    restart: always 
     env_file:
       - config/db.env
     environment:
